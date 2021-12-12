@@ -110,6 +110,7 @@
     Click 2
   </button>
 
+
   <!-- part8.5  -->
   <!-- 하나의 요소에 이벤트가 발생할 때 실행할 메소드가 여러개라면
   쉼표로 구분하면서 메소드를 호출하겠다는 소괄호 필수 -->
@@ -117,6 +118,32 @@
     Click me!
   </button>
 
+    <!-- part9. 이벤트핸들링 - 이벤트 수식어 -->
+  <a
+    href="https://naver.com"
+    target="_blank"
+    @click.prevent.once="handler">
+    <!-- @click.once 핸들러를 단한번만 실행해줌 -->
+    NAVER
+  </a>
+
+
+  <!-- part9.5 -->
+  <div
+    class="parent"
+    @click.self="handlerA">
+    <div
+      class="child">
+    </div>
+  </div>
+
+  <!-- part9.55 -->
+  <!-- .passive 로직의 처리와 화면의 스크롤을 독립시켜서 부하를 줄임 -->
+  <div
+    class="parent"
+    @wheel.passive="handler">
+    <div class="child"></div>
+  </div>
 
 </template> */}
 
@@ -336,7 +363,65 @@ export default {
     }
   }
 }
+
+// part9. 이벤트 핸들링 -이벤트 수식어
+export default {
+  methods: {
+    handler() {
+      // @click에 직접적으로 사용할 수 있음(단순화)
+      // event.preventDefault()
+      console.log('ABC')
+    }
+  }
+}
+
+
+// part9.5 이벤트 버블링: 이벤트가 점점 확산되는것
+// 자식요소를 동작시킬 때, 그 요소를 포함한 부모요소까지 전파되는것
+// stopPropagation() 이벤트 버블링을 방지함. @click.stop
+// 이벤트 캡처링: 부모요소에서 자식요소로 내려오는개념 @click.capture
+// @click.capture.stop 이벤트 버블링을 막아줌
+// @click.self 자신의 영역만 클릭했을때 동작(타겟이라는 클릭한 부분과
+//  커런트 타겟이라는 그 이벤트가 연결되있는 요소가 같을때 동작)
+// target: 실제로 클릭이된 그 요소
+// currentTarget: 커런트 타겟이 실행하게된 함수의 이벤트에 해당하는 요소
+export default {
+  methods: {
+    handlerA(event) {
+      console.log(event.target)
+      console.log(event.currentTarget)
+      console.log('A')
+    },
+    handlerB() {
+      // event.stopPropagation() // = @click.stop 
+      console.log('B')
+    }
+  }
+}
+
+
+// part9.55
+export default {
+  methods: {
+    handler(event) {
+      // 휠 한번에 10000번이 됨(큰 부하가 걸림, 버벅임)
+      for (let i = 0; i < 10000; i += 1) {
+      console.log(event)
+      }
+    }
+  }
+}
+
 </script> */}
+
+
+
+
+
+
+
+
+
 
 // <style scoped lang="scss">
   // part 1
@@ -355,4 +440,20 @@ export default {
 //     color: red;
 //     font-weight: bold;
 //   }
+
+// part 9
+// .parent {
+//   width: 200px;
+//   height: 100px;
+//   background-color: royalblue;
+//   margin: 10px;
+//   padding: 10px;
+//   overflow: auto; // 9.55
+//   .child {
+//     width: 100px;
+//     height: 100px;
+//     height: 2000px; // 9.55
+//     background-color: orange;
+//   }
+// }
 // </style>
