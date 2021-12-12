@@ -145,7 +145,85 @@
     <div class="child"></div>
   </div>
 
+
+  <!-- part9.555 이벤트핸들링 키 수식어 -->
+  <input
+    type="text" 
+    @keydown.a="handler" />
+
+
+  <!-- part10. 폼 입력 바인딩 -->
+  <h1>{{ msg }}</h1>
+  <input
+    type="text"
+    v-model="msg" />
+  <h1>{{ checked }}</h1>
+  <input
+    type="checkbox"
+    v-model="checked" />
+  <!-- 한글을 입력할때는 v-model의 간소화보단 수동으로 양방향을 줘야함 -->
+  <!-- <input
+    type="text"
+    :value="msg" 
+    @input="msg = $event.target.value" /> -->
+
+
+  <!-- part11. v-model -->
+  <h1>{{ msg }}</h1>
+  <input
+    type="text"
+    v-model.trim="msg" />
+  <!-- <input
+    type="text" 
+    :value="msg"
+    @input="msg = $event.target.value" /> -->
+    <!-- @change 입력이 완료된 후 focus가 되지 않을때 다른쪽 갱신 
+    v-model.lazy와 같음 -->
+
+
+  <!-- part12 컴포넌트 기초-->
+  <MyBtn>Banana</MyBtn>
+  <MyBtn
+    :color="color">
+    <span style="color: red;">Cherry</span>
+  </MyBtn>
+  <MyBtn
+    large
+    color="royalblue">
+    Apple
+  </MyBtn>
+  <MyBtn text="Banana">
+    Pich
+  </MyBtn>
+  <!-- <MyBtn text="Banana" /> -->
+  <button>Apple</button>
+
+
+
+
+  <!-- part12.2 컴포넌트 속성 상속-->
+  <!-- 속성상속: 컴포넌트가 사용되는 곳에 작성을 해놓은 class같은 
+  여러 속성들이 컴포넌트 내부에 있는 하나의 요소에 연결이 되는 것 -->
+  <!-- 컴포넌트 내부의 최상위 요소가 여러개면 속성이 상속되지 못함 -->
+  <MyBtn2
+    class="heropy"
+    style="color: red;"
+    title="Hello world!">
+    Banana
+  </MyBtn2>
+
+
 </template> */}
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -411,6 +489,82 @@ export default {
     }
   }
 }
+
+// part9.555 이벤트 핸들링 키 수식어
+// 입력을 했을때 콘솔창에 나타나는 Key값
+export default {
+  methods: {
+    handler() {
+      console.log('Enter!!')
+      // console.log(event)
+    }
+  }
+}
+
+// part10. 폼 입력 바인딩
+// v-model 양방향 데이터 바인딩 : 사용자가 입력한 데이터가 양쪽에 영향을 끼짐
+// 단, 한글을 입력할 때 한박자가 늦게 동작(글자가 완성될때 한글자씩생김)
+export default {
+  data() {
+    return {
+      msg: 'Hello world!',
+      checked: false
+    }
+    // 단방향 데이터 바인딩 : msg: Hello world를 input의 value 및
+    // h1의{{content}} 데이터 부분에서 HTML로 한쪽방향으로 흐름
+  },
+  // methods: {
+  //   handler(event) {
+  //     console.log(event.target.value)
+  //     this.msg = event.target.value
+  //   }
+  // }
+}
+
+// part11. v-model
+export default {
+  data() {
+    return {
+      msg: 'Hello world!'
+      // msg: 123
+      // input에 입력하다보면 문자데이터로 만들어져서 msg에 들어옴
+      // 숫자데이터를 지속적으로 받아오려면 v-model.number
+    }
+  },
+  watch: {
+    msg() {
+      // v-model.number 확인할 때
+      // console.log(typeof this.msg)
+      console.log(this.msg)
+    }
+  }
+}
+
+
+// part12. 컴포넌트 기초
+import MyBtn from '~/components/MyBtn'
+
+export default {
+  components: {
+    MyBtn
+  },
+  data() {
+    return {
+      color: '#000'
+    }
+  }  
+}
+
+// part12.2 컴포넌트 속성 상속
+import MyBtn2 from '~/components/MyBtn2'
+
+export default {
+  components: {
+    MyBtn2
+  }
+}
+
+
 
 </script> */}
 
