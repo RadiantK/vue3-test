@@ -16,17 +16,37 @@
   </ul> -->
   <!-- Remove & use example component -->
 
+  <!-- part1.2 인스턴스와 라이프 사이클 -->
+  <h1>{{ count }}</h1>
+
+
+  <!-- part1.3 템플릿 문법 -->
+  <h1
+    v-once
+    @click="add">
+    {{ msg }}
+  </h1>
+  <h1 v-html="msg"></h1>
+
+  <!-- part1.4 템플릿문법2 -->
+  <h1
+    :[attr]="'active'"
+    @[event]="add">
+    {{ msg }}
+  </h1>
+
+
   <!-- part2 computed -->
-  <!-- <Fruits /> -->
+  <Fruits />
 
   <!-- part3 computed 캐싱, Getter Setter -->
-  <!-- <button @click="add">
+  <button @click="add">
     ADD
   </button>
   <h1>{{ reversedMessage }}</h1>
   <h1>{{ reversedMessage }}</h1>
   <h1>{{ reversedMessage }}</h1>
-  <h1>{{ reversedMessage }}</h1> -->
+  <h1>{{ reversedMessage }}</h1>
 
   <!-- part4. watch -->
   <!-- <h1 @click="changeMessage">
@@ -213,6 +233,41 @@
   </MyBtn2>
 
 
+  <!-- part12.3 컴포넌트 emit -->
+  <MyBtn3
+    @click="log"
+    @change-msg="logMsg">
+    Banana
+  </MyBtn3>
+
+
+  <!-- part12.4 컴포넌트 slot -->
+  <!-- contents를 삽입하면 해당하는 슬롯태그가 대체
+  contents가 없으면 슬롯 사이에 있는 내용이 출력 -->
+  <!-- 내용의 순서를 정확하게 지켜서 동작하게 하려면 이름을 갖는 슬롯 지정 -->
+  <!-- v-slot 으로 순서를 보장해주면 순서가 바뀌어도 순서대로 나타남 -->
+  <MyBtn4>
+    <template #text>
+      <span>Banana</span>
+    </template>
+    <template #icon>
+      <span>(B)</span>
+    </template>
+  </MyBtn4>
+
+
+  <!-- part12.5 컴포넌트 Provide, inject -->
+  <button @click="message = 'Good?'">
+    Click!
+  </button>
+  <h1>App: {{ message }}</h1>
+  <!-- <Parent :msg="message" /> -->
+  <Parent />
+
+  <!-- part12.5 컴포넌트 Refs -->
+  <!-- ref 해당하는 요소 참조 -->
+  <Hello ref="hello" />
+
 </template> */}
 
 
@@ -258,13 +313,77 @@ export default {
   }
 }
 
-part2 computed
+// part1.2 인스턴스와 라이프 사이클
+export default {
+  data() {
+    return {
+      count: 2
+    }
+  },
+  // 컴포넌트가 생성되기 직전에 동작
+  beforeCreate() {
+    console.log('before Create!', this.count)
+  },
+  // 컴포넌트가 생성된 직후에 실행
+  created() {
+    console.log('Created!', this.count)
+  },
+  // 컴포넌트가 HTML에 연결되기 직전에 동작
+  beforeMount() {
+    console.log('before Mount!')
+    console.log(document.querySelector('h1'))
+  },
+  // 실제 컴포넌트가 HTML구조에 연결이 돼있음
+  mounted() {
+    console.log('Mounted!')
+    console.log(document.querySelector('h1'))
+  },
+}
+
+
+// part1.3 템플릿문법
+export default {
+  data() {
+    return {
+      msg: '<div style="color: red;">Hello!!</div>'
+    }
+  },
+  methods: {
+    add() {
+      this.msg += '!'
+    }
+  }
+}
+
+// part1.4 템플릿문법2
+export default {
+
+  data() {
+    return {
+      msg: 'active',
+      attr: 'class',
+      event: 'click'
+    }
+  },
+  methods: {
+    add() {
+      this.msg += '!'
+    }
+  }
+}
+
+
+
+// part2 computed
 import Fruits from '~/components/Fruits'
 export default { 
   components: {
     Fruits
   }
 }
+
+
+// part3. computed 캐싱 getter,setter
 export default {
   data() {
     return {
@@ -564,7 +683,86 @@ export default {
   }
 }
 
+// part12.3 컴포넌트 emit
+import MyBtn3 from '~/components/MyBtn3'
 
+export default {
+  components: {
+    MyBtn3
+  },
+  methods: {
+    log(event) {
+    console.log('Click!')
+    console.log(event)
+    },
+    logMsg(msg) {
+      console.log(msg)
+    }
+  }
+}
+
+
+// part12.4 컴포넌트 slot
+import MyBtn4 from '~/components/MyBtn4'
+
+export default {
+  components: {
+    MyBtn4
+  },
+}
+
+
+// part12.5 컴포넌트 Provide, inject
+import Parent from '~/components/Parent'
+import { computed } from 'vue'
+
+export default {
+  components: {
+    Parent
+  },
+  data() {
+    return {
+      message: 'Hello world!'
+    }
+  },
+  // provide 반응성을 제공 x, 데이터를 전달해서 한번 출력하는 용도
+  // 반응성을 유지해주는 데이터를 만드려면 computed함수를 실행해서
+  // 내부의 콜백함수를 만들어서 함수 내에서 특정한 반응성을 가지고싶은 데이터를 반환
+  // 보통 조상요소에서 porps로 데이터를 내려주면 부모요소거쳐서 자식요소로
+  // 다시 props를 통해 데이터를 내려주는데 그러한 과정을 생략하기위해서
+  // provide로 데이터를 정의해서 중간에 매개체 과정없이 데이터를 전달.
+  // 단점: 반응성을 가지지 않음, 조상요소에서 데이터를 변경되도 하위요소 
+  // 부분에서 갱신되지않음. 그래서 computed에서 계산된데이터를 가져와서 사용
+  provide() {
+    return {
+      // msg: this.message
+      msg: computed(() => this.message)
+    }
+  }
+}
+
+
+// part12.5 컴포넌트 Refs
+// 컴포넌트를 ref라는 속성으로 참조할 때는 $refs.hello라는 참조된 이름에
+// $el이라는 속성을 적어줘야함($refs.hello만 적고 콘솔로그 읽어보기),
+// 최상위 요소 하나일때 가능으로 여러개면 요소를 명시해주는게 좋음
+import Hello from '~/components/Hello'
+
+export default {
+  components: {
+    Hello
+  },
+  // created() {
+  //   // 컴포넌트 생성직후이기때문에 사용불가
+  //   console.log(this.$refs.hello)
+  // },
+  // ref는 컴포넌트가 Html에 연결된 mounted에서만 사용 가능
+  mounted() {
+    // const h1El = document.querySelector('#hello')
+    //  console.log(h1El.textContent)
+    console.log(this.$refs.hello.$refs.good)
+  }
+}
 
 </script> */}
 
@@ -595,6 +793,12 @@ export default {
 //     font-weight: bold;
 //   }
 
+// part1.3 템플릿문법2
+// .active {
+//   color: royalblue;
+//   font-size: 50px;
+// }
+
 // part 9
 // .parent {
 //   width: 200px;
@@ -610,4 +814,4 @@ export default {
 //     background-color: orange;
 //   }
 // }
-// </style>
+// </style> 
