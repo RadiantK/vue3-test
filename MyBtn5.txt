@@ -1,0 +1,36 @@
+컴포지션 수정전
+
+<template>
+  <!-- :콜론기호를 적용하지않고 =을 써서 속성과 값처럼 명시하게되면
+  이 컴포넌트가 실행되고 있는 모든 속성부분이 적용  -->
+  <div 
+    v-bind="$attrs"
+    class="btn"
+    @click="hello">
+    <slot></slot>
+  </div>
+</template>
+
+<script>
+export default {
+  // 속성을 상속받지 않음, 직접지정할때 사용
+  inheritAttrs: false,
+  props: {
+    color: {
+      type: String,
+      // 기본값
+      default: 'gray'
+    }
+  },
+  emits: ['hello'],
+  mounted() {
+    console.log(this.color)
+    console.log(this.$attrs)
+  },
+  methods: {
+    hello() {
+      this.$emit('hello')
+    }
+  }
+}
+</script> 

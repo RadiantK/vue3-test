@@ -1,4 +1,5 @@
 {/* <template>
+  
   <!-- part1 -->
   <!-- <h1 @click="increase">
     {{ count }}
@@ -219,8 +220,6 @@
   <button>Apple</button>
 
 
-
-
   <!-- part12.2 컴포넌트 속성 상속-->
   <!-- 속성상속: 컴포넌트가 사용되는 곳에 작성을 해놓은 class같은 
   여러 속성들이 컴포넌트 내부에 있는 하나의 요소에 연결이 되는 것 -->
@@ -267,6 +266,21 @@
   <!-- part12.5 컴포넌트 Refs -->
   <!-- ref 해당하는 요소 참조 -->
   <Hello ref="hello" />
+
+
+  <!-- part13.1 컴포지션 API 반응형 데이터(반응성) -->
+  <h1 @click="increase">
+    {{ count }}
+  </h1>
+
+  <!-- part14. 컴포지션 Props, Context -->
+  <MyBtn5
+    class="heropy"
+    style="color: red;"
+    color="#ff0000"
+    @hello="log">
+    Apple
+  </MyBtn5>
 
 </template> */}
 
@@ -761,6 +775,50 @@ export default {
     // const h1El = document.querySelector('#hello')
     //  console.log(h1El.textContent)
     console.log(this.$refs.hello.$refs.good)
+  }
+}
+
+
+
+// part13.1 컴포지션 API 반응형 데이터(반응성)
+// 컴포지션 API를 활용할 때 반응성을 가지는 데이터를 만들기 위해서
+// ref라는 기능을 'vue'라는 패키지에서 가져와서 초기값을 만들어줘야함
+// 만들어진 데이터는 setup()에서 사용할때는 데이터그대로 사용하는게 아니라
+// .value로 활용해야함, 정리된 데이터를 반환하게되면 .value를 안써도 됨.
+import { ref } from 'vue'
+
+export default {
+  setup() {
+    // 반응성 X
+    // let count = 0
+
+    // 반응성을 가지지만 객체데이터로 반환이 되 데이터로 직접 사용 불가
+    // count.value로 객체데이터내부의 속성 사용가능
+    let count = ref(0)
+    function increase() {
+      // count += 1
+      count.value += 1
+    }
+
+    return {
+      count,
+      increase
+    }
+  }
+}
+
+
+// part14. 컴포지션 Props, Context
+import MyBtn5 from '~/components/MyBtn5'
+
+export default {
+  components: {
+    MyBtn5
+  },
+  methods: {
+    log() {
+      console.log('Hello world!')
+    }
   }
 }
 
