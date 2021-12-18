@@ -740,8 +740,8 @@ export default {
     }
   },
   // provide 반응성을 제공 x, 데이터를 전달해서 한번 출력하는 용도
-  // 반응성을 유지해주는 데이터를 만드려면 computed함수를 실행해서
-  // 내부의 콜백함수를 만들어서 함수 내에서 특정한 반응성을 가지고싶은 데이터를 반환
+  // 반응성을 유지해주는 데이터를 만드려면 computed함수를 실행해서 내부의
+  // 콜백함수를 만들어서 함수 내에서 특정한 반응성을 가지고싶은 데이터를 반환
   // 보통 조상요소에서 porps로 데이터를 내려주면 부모요소거쳐서 자식요소로
   // 다시 props를 통해 데이터를 내려주는데 그러한 과정을 생략하기위해서
   // provide로 데이터를 정의해서 중간에 매개체 과정없이 데이터를 전달.
@@ -808,7 +808,7 @@ export default {
 }
 
 
-// part14. 컴포지션 Props, Context
+// part14. 컴포지션: Props, Context
 import MyBtn5 from '~/components/MyBtn5'
 
 export default {

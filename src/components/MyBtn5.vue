@@ -36,6 +36,7 @@
 
 // 변경 후
 import { onMounted } from 'vue'
+
 export default {
   // 속성을 상속받지 않음, 직접지정할때 사용
   inheritAttrs: false,

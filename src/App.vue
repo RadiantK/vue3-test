@@ -4,7 +4,7 @@
     class="heropy"
     style="color: red;"
     color="#ff0000"
-    @hello="log">
+    @click="log">
     Apple
   </MyBtn5>
 </template>

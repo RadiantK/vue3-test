@@ -8,6 +8,7 @@ const path = _require('path')
 const HtmlPlugin = _require('html-webpack-plugin')
 const CopyPlugin = _require('copy-webpack-plugin')
 const { VueLoaderPlugin } = _require('vue-loader')
+const webpack = require('webpack')
 
 module.exports = {
   resolve: {
@@ -65,6 +66,11 @@ module.exports = {
 
   // 번들링 후 결과물의 처리 방식 등 다양한 플러그인들을 설정
   plugins: [
+    new webpack.DefinePlugin({
+      // Drop Options API from bundle
+      '__VUE_OPTIONS_API__': false,
+      '__VUE_PROD_DEVTOOLS__' : true,
+    }),
     new HtmlPlugin({
       template: './index.html'
     }),

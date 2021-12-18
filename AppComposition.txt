@@ -81,8 +81,8 @@ export default {
 import { ref, computed, watch, onMounted } from 'vue'
 
 export default {
-  // setup메소드는 created라는 라이프사이클 즉, 컴포넌트가 생성된 직후에 동작하기 때문에
-  // setup메소드 내부에서 실행되는 로직은 created()에 작성하는것과 비슷함
+  // setup()는 created라는 라이프사이클 즉, 컴포넌트가 생성된 직후에 동작하기 
+  // 때문에 setup() 내부에서 실행되는 로직은 created()에 작성하는것과 비슷함
   setup() {
     const count = ref(0)
     const doubleCount = computed(() => {
